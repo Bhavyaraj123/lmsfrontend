@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { questions } from "./Psychometrictestquestion";
 import passImage from "../assets/images/right.jpg";
 import failImage from "../assets/images/wrong.jpg";
-
 const TestComponent = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -34,7 +33,8 @@ const TestComponent = () => {
   const handleOptionChange = (option) => {
     setSelectedOption(option);
   };
-
+  const field = "Nursing , MBBS , BAMS , BHMS , Pharmacy";
+  const field2 = "Better Luck, Try Again Next Time ";
   const getResultImage = () => {
     if (score >= 5) {
       return passImage;
@@ -42,22 +42,53 @@ const TestComponent = () => {
       return failImage;
     }
   };
-
+  // Progress Bar
+  const progressBar = () => {
+    return ((currentQuestion + 1) / questions.length) * 100;
+  };
   return (
     <div className="container">
       {showScore ? (
         <div className="result flex justify-center items-center flex-col">
-          <img src={getResultImage()} alt={score >= 5 ? "Pass" : "Fail"} className="mb-4 w-[50%] h-[50%]" />
-          <h2>You scored {score} out of {questions.length}</h2>
-          <button onClick={restartQuiz}>Restart Quiz</button>
+          <img
+            src={getResultImage()}
+            alt={score >= 5 ? "Pass" : "Fail"}
+            className="mb-4 w-[50%] h-[50%]"
+          />
+          <h2>
+            You scored {score} out of {questions.length}
+          </h2>
+          <div className="mb-2">
+            {score > 5 ? (
+              <h2 className={`${score >= 5}`}>
+                The Desired field for you is {field}
+              </h2>
+            ) : (
+              <h2 className={`${score < 5}`}>{field2}</h2>
+            )}
+          </div>
+          <button
+            onClick={restartQuiz}
+            className=" bg-gradient-to-r from-blue-500 to-teal-400 text-white py-1 px-4 rounded-full font-semibold hover:bg-pink-600 transition duration-300 justify-center "
+          >
+            Restart Quiz
+          </button>
         </div>
       ) : (
         <>
+          <div className="progress-barbg-gradient-to-r from-blue-500 to-teal-400 h-2 rounded-full overflow-hidden mb-4">
+            <div
+              className="bg-blue-500 h-full  "
+              style={{ width: `${progressBar()}%` }}
+            />
+          </div>
           <div className="question-section">
             <div className="question-count">
               <span>Question {currentQuestion + 1}</span>/{questions.length}
             </div>
-            <div className="question-text">{questions[currentQuestion].question}</div>
+            <div className="question-text">
+              {questions[currentQuestion].question}
+            </div>
           </div>
           <div className="answer-section">
             {questions[currentQuestion].options.map((option) => (
@@ -87,3 +118,4 @@ const TestComponent = () => {
 };
 
 export default TestComponent;
+ 
